@@ -22,10 +22,12 @@
     "jsdom": "^11.1.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "nightwatch": "^0.9.16",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "selenium-server-standalone": "^2.53.1",
     "webpack": "^3.5.4"
   },
   "devDependencies": {
