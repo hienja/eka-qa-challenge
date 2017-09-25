@@ -1,4 +1,6 @@
 /node_modules
 /bundle
+/report
 .env
 test.pdf
+selenium-debug.log
