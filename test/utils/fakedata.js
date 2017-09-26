@@ -11,7 +11,12 @@ const invoices = invoicesList.map(function(value) {
 		'Shipper Load Nbr': value.load.shipper_load_number + '',
 		'Load Origin': value.load.lane.originCity.name + ', ' + value.load.lane.originCity.state.code,
 		'Load Destination': value.load.lane.destinationCity.name + ', ' + value.load.lane.destinationCity.state.code,
-		'Delivery Date': value.load.delivered_at.substring(0, 11),
+		'Delivery Date':
+			value.load.delivered_at.substring(5, 7) +
+			'/' +
+			value.load.delivered_at.substring(8, 10) +
+			'/' +
+			value.load.delivered_at.substring(2, 4),
 		'Invoice Number': value.iid + '',
 		'Invoice Amount': '$' + parseFloat(value.net_payable_cents / 100).toFixed(2)
 	};

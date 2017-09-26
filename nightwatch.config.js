@@ -23,6 +23,5 @@ module.exports = {
 				javascriptEnabled: true
 			}
 		}
-	},
-	test_runner: 'mocha'
+	}
 };
