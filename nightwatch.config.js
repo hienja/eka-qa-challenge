@@ -1,8 +1,8 @@
-var chromedriver = require('chromedriver');
 require('babel-core/register');
+let chromedriver = require('chromedriver');
 
 module.exports = {
-	src_folders: ['test'],
+	src_folders: ['test/e2e'],
 	output_folder: './report',
 	selenium: {
 		start_process: true,
@@ -23,7 +23,6 @@ module.exports = {
 				javascriptEnabled: true
 			}
 		}
-	}
-	// ,
-	// test_runner: 'mocha'
+	},
+	test_runner: 'mocha'
 };
