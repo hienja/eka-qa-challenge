@@ -3,7 +3,7 @@ let chromedriver = require('chromedriver');
 
 module.exports = {
 	src_folders: ['test/e2e'],
-	output_folder: './report',
+	output_folder: 'report',
 	selenium: {
 		start_process: true,
 		server_path: './node_modules/selenium-server-standalone/index.jar',

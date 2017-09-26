@@ -8,6 +8,7 @@ import PDFJS from 'pdfjs-dist';
 import fakedata from '../utils/fakedata.js';
 import moment from 'moment';
 import ExtractPDF from '../utils/utils.js';
+import names from '../utils/names.js';
 
 Enzyme.configure({ adapter: new Adapter() });
 const brokers = fakedata.brokers;
@@ -15,24 +16,24 @@ const invoices = fakedata.invoices;
 
 module.exports = {
 	before: function(browser) {
-		if (fs.existsSync('./test.pdf')) {
-			fs.unlinkSync('./test.pdf');
+		if (fs.existsSync(names.testPDF.location)) {
+			fs.unlinkSync(names.testPDF.location);
 		}
 	},
 	'Check App component': function(browser) {
 		const wrapper = shallow(<App />);
-		browser.assert.equal(wrapper.find('button.btn.btn-secondary').text(), 'Click Me');
+		browser.assert.equal(wrapper.find(names.page.button).text(), names.page.buttonText);
 	},
 	'Check for button': function(browser) {
 		browser
-			.url('localhost:3005')
-			.waitForElementVisible('body')
-			.assert.elementPresent('button.btn.btn-secondary')
-			.click('button.btn.btn-secondary')
+			.url(names.page.url)
+			.waitForElementVisible(names.page.body)
+			.assert.elementPresent(names.page.button)
+			.click(names.page.button)
 			.pause(5000);
 	},
 	'Look at pdf': function(browser) {
-		let testPDF = new Uint8Array(fs.readFileSync('./test.pdf'));
+		let testPDF = new Uint8Array(fs.readFileSync(names.testPDF.location));
 		PDFJS.getDocument(testPDF).then(function(pdfDocument) {
 			pdfDocument.getPage(1).then(function(page) {
 				page.getTextContent().then(function(content) {
@@ -43,21 +44,12 @@ module.exports = {
 					for (var i = 0; i < dataset.shipperInfo.length; i++) {
 						for (var j = 0; j < dataset.shipperInfo[i].Loads.length; j++) {
 							let check = invoices.filter(function(item) {
-								return item['EKA Load Nbr'] == dataset.shipperInfo[i].Loads[j]['EKA Load Nbr'];
+								return (
+									item[names.testPDF.EKA_NUM] ==
+									dataset.shipperInfo[i].Loads[j][names.testPDF.EKA_NUM]
+								);
 							});
-							let condition = true;
-							for (var key in check[0]) {
-								if (key === 'Shipper Name') {
-									if (check[0][key] != dataset.shipperInfo[i][key]) {
-										condition = false;
-									}
-								} else {
-									if (check[0][key] != dataset.shipperInfo[i].Loads[j][key]) {
-										condition = false;
-									}
-								}
-							}
-							browser.assert.equal(condition, true);
+							browser.assert.deepEqual(check[0], dataset.shipperInfo[i].Loads[j]);
 						}
 					}
 					//Test number of entries
@@ -77,13 +69,13 @@ module.exports = {
 					//Test Shippers total
 					browser.assert.equal(
 						invoices.reduce(function(acc, value) {
-							return acc + Number(value['Invoice Amount'].substring(1));
+							return acc + Number(value[names.testPDF.INVOICE_AMOUNT].substring(1));
 						}, 0),
 						dataset.shipperInfo.reduce(function(acc, value) {
 							return (
 								acc +
 								value.Loads.reduce(function(acc, value) {
-									return acc + Number(value['Invoice Amount'].substring(1));
+									return acc + Number(value[names.testPDF.INVOICE_AMOUNT].substring(1));
 								}, 0)
 							);
 						}, 0)

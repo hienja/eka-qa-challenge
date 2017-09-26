@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack && nodemon server/index.js --exec babel-node --presets es2015,stage-2",
     "build": "babel src -d lib",
-    "test": "mocha"
+    "test": "nightwatch --config nightwatch.config.js"
   },
   "author": "Joseph Yu",
   "license": "ISC",

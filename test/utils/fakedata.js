@@ -1,5 +1,6 @@
 import brokersList from '../../server/services/InvoiceReport/fakedata/brokers.js';
 import invoicesList from '../../server/services/InvoiceReport/fakedata/invoices.js';
+import names from './names.js';
 
 const brokers = brokersList.map(function(value) {
 	return { brokerName: value.name };

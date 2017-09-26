@@ -1,3 +1,5 @@
+import names from './names.js';
+
 export default class ExtractPDF {
 	constructor(content) {
 		let listOfText = content.items.map(function(value) {
@@ -10,17 +12,14 @@ export default class ExtractPDF {
 
 	getHeader(list) {
 		let header = {};
-		const lastHeaderWords = 'Invoice Date';
-		const runDate = 'Run Date';
-		const title = 'Daily Invoice Report';
 		let condition = true;
 
 		while (condition) {
-			if (list[0].includes(runDate)) {
+			if (list[0].includes(names.testPDF.RUN_DATE)) {
 				header.runDate = list[0].split(' ')[2];
-			} else if (list[0].includes(title)) {
+			} else if (list[0].includes(names.testPDF.title)) {
 				header.title = list[0];
-			} else if (list[0].includes(lastHeaderWords)) {
+			} else if (list[0].includes(names.testPDF.lastHeaderWords)) {
 				header.invoiceDate = list[0].split(' ')[2];
 				condition = false;
 			} else {
@@ -34,11 +33,10 @@ export default class ExtractPDF {
 
 	getColumnNames(list) {
 		let columnNameList = [];
-		const lastColumnName = 'Invoice Amount';
 		let condition = true;
 		while (condition) {
 			columnNameList.push(list[0]);
-			if (list[0].includes(lastColumnName)) {
+			if (list[0].includes(names.testPDF.lastColumnName)) {
 				condition = false;
 			}
 			list.shift();
@@ -59,21 +57,23 @@ export default class ExtractPDF {
 			let shipperInfo = shipperList[shipperList.length - 1];
 			shipperInfo[columnNames[0]] = list[0];
 			list.shift();
-			shipperInfo['Loads'] = [];
+			shipperInfo[names.testPDF.LOADS] = [];
 			for (let k = 1; k < columnNames.length; k++) {
 				let columnName = columnNames[k];
 				let count = 0;
 
 				while (count < countLoadNumber) {
 					if (k === 1) {
-						shipperInfo['Loads'].push({});
+						shipperInfo[names.testPDF.LOADS].push({});
+						shipperInfo[names.testPDF.LOADS][count][names.testPDF.SHIPPER_NAME] =
+							shipperInfo[names.testPDF.SHIPPER_NAME];
 					}
-					shipperInfo['Loads'][count][columnName] = list[0];
+					shipperInfo[names.testPDF.LOADS][count][columnName] = list[0];
 					list.shift();
 					count++;
 				}
 			}
-			shipperInfo['Invoice Amount'] = list[0];
+			shipperInfo[names.testPDF.INVOICE_AMOUNT] = list[0];
 			list.shift();
 		}
 
