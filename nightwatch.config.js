@@ -1,4 +1,5 @@
 var chromedriver = require('chromedriver');
+require('babel-core/register');
 
 module.exports = {
 	src_folders: ['test'],
